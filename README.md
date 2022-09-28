@@ -33,7 +33,7 @@ const options_custom = {
     password: 'logger*test',
     database: 'WinstonTest',
     table: 'sys_logs_custom',
-    fields: {level: 'mylevel', meta: 'metadata', message: 'source', timestamp: 'addDate'}
+    fields: {level: 'mylevel', meta: 'metadata', method:'methodField', endpoint: 'myEndpoint', req:'reqFiled', responseCode:'responseCodeField', res:'resField', timestamp: 'timestampField', responseTime:'rtField'}
 };
 
 //meta json log table fields
@@ -58,13 +58,7 @@ const logger = winston.createLogger({
     ],
 });
 
-const rnd = Math.floor(Math.random() * 1000);
-const msg = `test message ${rnd}`;
 
-logger.debug(msg, {message: msg, type: 'demo'});
-logger.error(msg, {message: msg, type: 'demo'});
-logger.info(msg, {message: msg, type: 'demo'});
-logger.warn(msg, {message: msg, type: 'demo'});
 
 
 
@@ -80,18 +74,28 @@ Demos:
  CREATE TABLE `WinstonTest`.`sys_logs_default` (
  `id` INT NOT NULL AUTO_INCREMENT,
  `level` VARCHAR(16) NOT NULL,
- `message` VARCHAR(2048) NOT NULL,
- `meta` VARCHAR(2048) NOT NULL,
+ `metadata` JSON NOT NULL,
+ `method` VARCHAR(5) NOT NULL,
+ `endpoint` VARCHAR(500) NOT NULL,
+ `req` JSON NOT NULL,
+ `responsecode` INT NOT NULL,
+ `res` JSON NOT NULL,
  `timestamp` DATETIME NOT NULL,
+ `responsetime` INT NOT NULL,
  PRIMARY KEY (`id`));
  
  # or
  CREATE TABLE `WinstonTest`.`sys_logs_custom` (
  `id` INT NOT NULL AUTO_INCREMENT,
- `mylevel` VARCHAR(16) NOT NULL,
- `source` VARCHAR(1024) NOT NULL,
- `metadata` VARCHAR(2048) NOT NULL,
- `addDate` DATETIME NOT NULL,
+ `level` VARCHAR(16) NOT NULL,
+ `metadata` JSON NOT NULL,
+ `methodField` VARCHAR(5) NOT NULL,
+ `myEndpoint` VARCHAR(500) NOT NULL,
+ `reqFiled` JSON NOT NULL,
+ `responseCodeField` INT NOT NULL,
+ `resField` JSON NOT NULL,
+ `timestampField` DATETIME NOT NULL,
+ `rtField` INT NOT NULL,
  PRIMARY KEY (`id`));
  
 ```
@@ -104,25 +108,12 @@ const options_custom = {
     user: 'logger',
     password: 'logger*test',
     database: 'WinstonTest',
-    table: 'sys_logs_custom',
+    tafields: {level: 'mylevel', meta: 'metadata', method:'methodField', endpoint: 'myEndpoint', req:'reqFiled', responseCode:'responseCodeField', res:'resField', timestamp: 'timestampField', responseTime:'rtField'}ble: 'sys_logs_custom',
     fields: {level: 'mylevel', meta: 'metadata', message: 'source', timestamp: 'addDate'}
 };
 
 ```
 
-You can use the JSON format meta field in MySQL database table. 
-That is great for searching & parsing, but it only supports MySQL 5.7+.
-
-```
- CREATE TABLE `WinstonTest`.`sys_logs_json` (
- `id` INT NOT NULL AUTO_INCREMENT,
- `level` VARCHAR(16) NOT NULL,
- `message` VARCHAR(2048) NOT NULL,
- `meta` JSON NOT NULL,
- `timestamp` DATETIME NOT NULL,
- PRIMARY KEY (`id`));
-
-```
 
 Install via npm:
 
